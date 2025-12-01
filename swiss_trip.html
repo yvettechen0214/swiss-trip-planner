@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇨🇭 我的瑞士互動式行程</title>
+    <style>
+        /* CSS 樣式：手機優化與美化 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f0f4f8; 
+            color: #333;
+            padding-bottom: 50px;
+        }
+        .header {
+            background-color: #d81e05; 
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .day-card {
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid #007bff;
+        }
+        .day-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .day-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e9f7ff;
+        }
+        .day-header h3 {
+            margin: 0;
+            color: #007bff;
+        }
+        .day-details {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: none; 
+            line-height: 1.6;
+        }
+        .day-details p {
+            margin: 5px 0;
+        }
+        .icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+        .day-card.active .icon {
+            transform: rotate(90deg); 
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🏔️ 瑞士十日遊行程規劃</h1>
+    <p>點擊日期卡片查看詳細行程與備註</p>
+</div>
+
+<div class="container" id="itinerary-list">
+    </div>
+
+<script>
+    // 1. 定義行程資料 (簡化，確保結構正確)
+    const swissItinerary = [
+        {
+            day: 1,
+            location: "蘇黎世 (Zürich) - 舊城區",
+            activities: ["抵達蘇黎世機場", "利馬特河遊船"],
+            notes: "時差調整，輕鬆安排。",
+            emoji: "🏙️"
+        },
+        {
+            day: 2,
+            location: "盧塞恩 (Luzern) - 瑞吉山",
+            activities: ["上午：搭車前往盧塞恩", "下午：登上瑞吉山"],
+            notes: "瑞吉山通票可用。",
+            emoji: "⛰️"
+        },
+        {
+            day: 3,
+            location: "少女峰 (Jungfraujoch) - 歐洲之巔",
+            activities: ["一整天：搭乘齒軌火車上少女峰", "冰宮參觀"],
+            notes: "山上氣溫極低，務必穿著保暖衣物。",
+            emoji: "❄️"
+        },
+    ]; // <-- 確保這裡有分號結束
+
+    const itineraryList = document.getElementById('itinerary-list');
+
+    // 2. 動態生成 HTML 內容
+    function renderItinerary() {
+        if (!itineraryList) {
+            console.error("找不到 ID 為 'itinerary-list' 的元素。");
+            return;
+        }
+        
+        swissItinerary.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'day-card';
+            card.onclick = () => toggleDetails(card, item.day); 
+
+            const header = document.createElement('div');
+            header.className = 'day-header';
+            header.innerHTML = `
+                <h3>${item.emoji} Day ${item.day} - ${item.location}</h3>
+                <span class="icon">▶</span>
+            `;
+
+            const details = document.createElement('div');
+            details.className = 'day-details';
+            details.id = `details-${item.day}`;
+            
+            let activitiesHtml = '<h4>主要活動：</h4><ul>';
+            item.activities.forEach(activity => {
+                activitiesHtml += `<li>${activity}</li>`;
+            });
+            activitiesHtml += '</ul>';
+
+            details.innerHTML = `
+                ${activitiesHtml}
+                <h4>💡 備註：</h4>
+                <p>${item.notes}</p>
+            `;
+
+            card.appendChild(header);
+            card.appendChild(details);
+            itineraryList.appendChild(card);
+        });
+    }
+
+    // 3. 處理點擊互動，切換顯示/隱藏細節
+    function toggleDetails(cardElement, dayId) {
+        const detailsElement = document.getElementById(`details-${dayId}`);
+        const isCurrentlyActive = cardElement.classList.contains('active');
+
+        // 關閉所有其他已開啟的卡片
+        document.querySelectorAll('.day-card').forEach(c => {
+            if (c !== cardElement && c.classList.contains('active')) {
+                c.classList.remove('active');
+                c.querySelector('.day-details').style.display = 'none';
+            }
+        });
+
+        // 切換點擊卡片的狀態
+        if (!isCurrentlyActive) {
+            cardElement.classList.add('active');
+            detailsElement.style.display = 'block';
+        } else {
+            cardElement.classList.remove('active');
+            detailsElement.style.display = 'none';
+        }
+    }
+
+    // 啟動：在網頁內容載入後執行
+    document.addEventListener('DOMContentLoaded', renderItinerary);
+</script>
+
+</body>
+</html>
