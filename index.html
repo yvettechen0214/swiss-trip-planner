@@ -7,7 +7,7 @@
     <style>
         /* 豪華/互動風格 Base */
         :root {
-            --primary-color: #008080; /* 深青色 - 主題色 */
+            --primary-color: #4A5C7E; /* 莫迪藍 - 主題色 */
             --accent-color: #FF6347; /* 日落橙色 - 點綴色 */
             --bg-dark: #2c3e50; /* 深灰背景 */
             --bg-light: #f9f9f9; /* 淺色內容背景 */
@@ -31,16 +31,16 @@
 
         /* 頂部橫幅 */
         .hero-banner {
-            height: 180px;
+            height: 150px;
             background: linear-gradient(135deg, var(--primary-color), #004d4d);
             color: white;
             text-align: center;
             padding: 30px 20px 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .hero-banner h1 {
-            font-size: 1.8em;
+            font-size: 1.6em;
             margin: 0 0 5px 0;
             font-weight: 800;
         }
@@ -53,10 +53,10 @@
         /* 內容卡片樣式 - 豪華質感 */
         .card {
             background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 15px; 
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
             transition: transform 0.3s, box-shadow 0.3s;
         }
         .card:hover {
@@ -87,27 +87,55 @@
         }
         summary {
             font-weight: 700;
-            padding: 18px;
+            padding: 15px;
             cursor: pointer;
             outline: none;
             color: var(--text-dark);
-            background-color: #e6f3f3; /* 淺主題色背景 */
+            background-color: #E6EAF2; /* 淺主題色背景 */
             border-bottom: 1px solid #ddd;
             display: flex;
             align-items: center;
             justify-content: space-between;
             font-size: 1.1em;
+            text-align: left; /* 關鍵：確保文字靠左 */
         }
-        summary::before {
-            content: "↓"; 
-            margin-right: 10px;
+       
+       
+       .summary-content {
+            flex-grow: 1; /* 讓內容佔滿大部分空間 */
+            text-align: left;
+        }
+        .arrow-icon {
+            margin-left: 15px; /* 箭頭和文字的間距 */
             font-size: 1em;
             transition: transform 0.2s;
             color: var(--primary-color);
+            display: inline-block;
         }
-        details[open] summary::before {
+        details[open] .arrow-icon {
             transform: rotate(180deg);
         }
+        /* 移除或註釋掉原生的 summary::before 樣式 */
+    summary::before {
+        content: none; 
+    }
+
+    /* 新增：讓內容佔滿空間 */
+    .summary-content {
+        flex-grow: 1; 
+        text-align: left;
+    }
+    /* 新增：箭頭的樣式 */
+    .arrow-icon {
+        margin-left: 15px; /* 箭頭和文字的間距 */
+        font-size: 1em;
+        transition: transform 0.2s;
+        color: var(--primary-color);
+        display: inline-block;
+    }
+    details[open] .arrow-icon {
+        transform: rotate(180deg);
+    }
         .schedule-detail {
             padding: 15px 20px;
             line-height: 1.7;
@@ -248,6 +276,7 @@
             
             <details>
                 <summary>04/03 (五) | ✈️ 抵達與移動 (米蘭 → 策馬特)</summary>
+                </details>
                 <div class="schedule-detail">
                     <h3>上午 (07:50am 抵達)</h3>
                     <ul><li>抵達米蘭機場 (MXP) → 租車 (Outstanding 預訂)。</li></ul>
@@ -495,6 +524,7 @@
     </script>
 </body>
 </html>
+
 
 
 
