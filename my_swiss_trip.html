@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瑞士米蘭豪華旅程</title>
+    <style>
+        /* 豪華/互動風格 Base */
+        :root {
+            --primary-color: #008080; /* 深青色 - 主題色 */
+            --accent-color: #FF6347; /* 日落橙色 - 點綴色 */
+            --bg-dark: #2c3e50; /* 深灰背景 */
+            --bg-light: #f9f9f9; /* 淺色內容背景 */
+            --text-dark: #1f303f; 
+        }
+        
+        body {
+            font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif, '微軟正黑體';
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light); 
+            color: var(--text-dark); 
+            padding-bottom: 80px; /* 底部導航欄空間 */
+            transition: background-color 0.3s;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* 頂部橫幅 */
+        .hero-banner {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary-color), #004d4d);
+            color: white;
+            text-align: center;
+            padding: 30px 20px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        .hero-banner h1 {
+            font-size: 1.8em;
+            margin: 0 0 5px 0;
+            font-weight: 800;
+        }
+        .hero-banner p {
+            opacity: 0.9;
+            font-size: 1em;
+            font-weight: 300;
+        }
+
+        /* 內容卡片樣式 - 豪華質感 */
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px; 
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-3px); /* 互動感 */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .card h2 {
+            font-size: 1.3em;
+            color: var(--text-dark);
+            border-bottom: 3px solid var(--accent-color); 
+            padding-bottom: 5px;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        /* Collapsible Section (行程摺疊) */
+        details {
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        details:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        summary {
+            font-weight: 700;
+            padding: 18px;
+            cursor: pointer;
+            outline: none;
+            color: var(--text-dark);
+            background-color: #e6f3f3; /* 淺主題色背景 */
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.1em;
+        }
+        summary::before {
+            content: "↓"; 
+            margin-right: 10px;
+            font-size: 1em;
+            transition: transform 0.2s;
+            color: var(--primary-color);
+        }
+        details[open] summary::before {
+            transform: rotate(180deg);
+        }
+        .schedule-detail {
+            padding: 15px 20px;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+        .schedule-detail h3 {
+             font-size: 1.1em;
+             color: var(--accent-color);
+             margin: 18px 0 8px 0;
+             font-weight: 700;
+        }
+        .hotel-info {
+            margin-top: 25px;
+            padding: 15px;
+            border: 2px dashed #ddd; /* 更清晰的界線 */
+            background-color: #fffaf0; 
+            border-radius: 8px;
+        }
+
+        /* 圖片佔位符樣式 */
+        .img-placeholder {
+            width: 100%;
+            height: 150px;
+            background-color: #eee;
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* Tab Bar Styling (固定底部分頁導航) */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px; 
+            background-color: var(--bg-dark); /* 深色背景 */
+            border-top: 5px solid var(--accent-color); 
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .tab-item {
+            flex: 1;
+            text-align: center;
+        }
+        .tab-item a {
+            text-decoration: none;
+            color: white; 
+            font-size: 0.78em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px 0;
+            transition: color 0.3s;
+        }
+        .tab-item a.active {
+            color: var(--accent-color); /* 活躍狀態為點綴色 */
+            font-weight: 700;
+        }
+        .tab-item i {
+            font-style: normal;
+            font-size: 1.6em;
+            margin-bottom: 3px;
+        }
+        
+        /* 連結按鈕樣式 */
+        .link-style {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .link-style:hover {
+            background-color: #004d4d;
+            transform: scale(1.03);
+            text-decoration: none;
+        }
+
+        /* 返回頂部按鈕 */
+        #backToTop {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 999;
+            border: none;
+            outline: none;
+            background-color: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s;
+        }
+        #backToTop:hover {
+            background-color: #cc4d38;
+        }
+        
+        /* 清單樣式 (導航/美食) */
+        .list-group li {
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-banner">
+        <h1>✈️ SWISS & MILAN VIP TOUR</h1>
+        <p>您的專屬行程管理中心 (2026)</p>
+    </div>
+
+    <div class="container">
+        <div id="itinerary" class="content-section">
+            <div class="card">
+                <h2>🗓️ 每日行程總覽</h2>
+            </div>
+            
+            <details>
+                <summary>04/03 (五) | ✈️ 抵達與移動 (米蘭 &rarr; 策馬特)</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：米蘭機場租車處]</div>
+                    <h3>上午 (07:50am 抵達)</h3>
+                    <ul><li>抵達米蘭機場 (MXP) &rarr; 租車 (Outstanding 預訂)。</li></ul>
+                    <h3>下午：長途移動</h3>
+                    <ul><li>駕駛前往 Täsch (約 4.5 小時)。在 Täsch 停車，轉乘火車進入策馬特。</li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿 (3 晚)</h3>
+                        <p>Carina - Design&Lifestyle hotel</p>
+                        <a href="https://maps.app.goo.gl/SedduiaU7eE3rPz9" target="_blank" class="link-style">🔗 飯店地址導航 (Carina)</a>
+                    </div>
+                </div>
+            </details>
+
+            <details open>
+                <summary>04/04 (六) | 🏔️ 策馬特觀光 (Gornergrat)</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：馬特洪峰全景]</div>
+                    <h3>上午：Gornergrat 觀景</h3>
+                    <ul><li>搭乘 Gornergrat 登山火車 &rarr; 近距離觀賞馬特洪峰。<a href="https://maps.app.goo.gl/R6jC51YPrUiD4TC4R8" target="_blank" class="link-style">(🔗 車站導航)</a></li></ul>
+                    <h3>下午：健行與倒影</h3>
+                    <ul><li>**Riffelsee 倒影：** Rotenboden 站下車，健行至 Riffelsee (必拍)。<a href="https://maps.app.goo.gl/Z6fWkKXYQUEnzuV757" target="_blank" class="link-style">(🔗 Riffelsee 地點)</a></li><li>**秘境：** 備用選擇：Furi 吊橋 (Hängebrücke)。</li></ul>
+                    <h3>晚間：美食推薦</h3>
+                    <ul><li>**Whymper-Stube** (傳統瑞士起司火鍋) 或 **Pizzeria Ristorante Molino** (比薩/義式)。</li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿</h3>
+                        <p>Carina - Design&Lifestyle hotel</p>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>04/05 (日) | 🌲 策馬特觀光 (Sunnegga/購物)</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：Stellisee 湖畔倒影]</div>
+                    <h3>上午：五湖健行</h3>
+                    <ul><li>**Sunnegga 纜車** &rarr; **五湖健行** (尋找 Stellisee 完美倒影)。</li></ul>
+                    <h3>下午：休閒與購物</h3>
+                    <ul><li>策馬特主街購物：尋找「山的杯子」/巧克力伴手禮。</li></ul>
+                    <h3>晚間：美食推薦</h3>
+                    <ul><li>**After Seven** (米其林推薦，精緻晚餐) 或 **Papperla Pub** (輕鬆小吃)。</li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿</h3>
+                        <p>Carina - Design&Lifestyle hotel</p>
+                    </div>
+                </div>
+            </details>
+            
+            <details>
+                <summary>04/06 (一) | 🚗 移動日 (策馬特 &rarr; 格林德瓦)</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：因特拉肯湖景或 Höhematte]</div>
+                    <h3>上午/下午：移動與停留</h3>
+                    <ul><li>長途駕駛前往因特拉肯。<a href="https://maps.app.goo.gl/UPj9kig77cK3EEd88" target="_blank" class="link-style">(🔗 Täsch 停車導航)</a></li><li>**因特拉肯一日遊：** Höhematte 觀景台拍照 / Brienz 湖停留。</li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿 (3 晚)</h3>
+                        <p>Eiger Lodge Chic (近 Grindelwald Terminal)</p>
+                        <a href="https://maps.app.goo.gl/YgEX3X7S6F38cxtA4" target="_blank" class="link-style">🔗 飯店地址導航 (Eiger Lodge)</a>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>04/07 (二) | 🧗 格林德瓦 (First)</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：First 懸崖步道]</div>
+                    <h3>上午：Grindelwald First</h3>
+                    <ul><li>**核心景點：** First 纜車 &rarr; 懸崖步道 (Cliff Walk) 必去！<a href="https://maps.app.goo.gl/uLrkR79iZVieLwfMHA" target="_blank" class="link-style">(🔗 First 纜車站)</a></li></ul>
+                    <h3>下午：健行與活動</h3>
+                    <ul><li>**部落客推薦：** Bachalpsee 健行 (阿爾卑斯山的寶石)。</li><li>First Flyer/Glider 等活動。</li></ul>
+                    <h3>晚間：美食推薦</h3>
+                    <ul><li>**Restaurant Pizzeria Grund** (比薩/義式) 或 **Restaurant Kreuz & Post** (傳統瑞士菜)。</li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿</h3>
+                        <p>Eiger Lodge Chic</p>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>04/08 (三) | 🧊 格林德瓦 (少女峰/備案)</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：少女峰雪景或 Lauterbrunnen 瀑布]</div>
+                    <h3>全天：少女峰或替代方案</h3>
+                    <ul><li>**主要景點：** 少女峰 (Jungfraujoch) (需視天氣)。</li><li>**備案：** Lauterbrunnen 瀑布谷 或 Männlichen Royal Walk (壯闊山景)。</li></ul>
+                    <h3>晚間：美食推薦</h3>
+                    <ul><li>**Hotel Restaurant Belvedere** (風景好的晚餐) 或在飯店輕鬆晚餐。<a href="https://maps.app.goo.gl/P8J8rWQFmatmaH8TC8" target="_blank" class="link-style">(🔗 Belvedere 導航)</a></li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿</h3>
+                        <p>Eiger Lodge Chic</p>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>04/09 (四) | 🚗 移動日 (格林德瓦 &rarr; 米蘭)</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：米蘭大教堂夜景]</div>
+                    <h3>上午/下午：移動</h3>
+                    <ul><li>長途駕駛：返回米蘭。</li></ul>
+                    <h3>晚間：米蘭市區</h3>
+                    <ul><li>德拉葛雷住宅酒店 Check-in。</li><li>米蘭大教堂 (Duomo) 周邊散步 &rarr; 體驗義式 Aperitivo。</li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿 (2 晚)</h3>
+                        <p>德拉葛雷住宅酒店 (Residenza Delle Grue)</p>
+                        <a href="https://maps.app.goo.gl/M4rJmkzLhEN3Sait9" target="_blank" class="link-style">🔗 飯店地址導航 (Residenza Delle Grue)</a>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>04/10 (五) | 🛍️ 米蘭一日遊 or 科莫湖</summary>
+                <div class="schedule-detail">
+                    <div class="img-placeholder">[圖像展示：科莫湖或米蘭拱廊街]</div>
+                    <h3>全天選項 (二選一)</h3>
+                    <ul><li>**選項一：科莫湖** (Bellagio 或 Varenna 小鎮)。<a href="https://maps.app.goo.gl/BTyXo8T17uMywrbpt6" target="_blank" class="link-style">(🔗 科莫湖導航)</a></li><li>**選項二：米蘭購物** (拱廊街、摩卡壺/咖啡豆採購)。</li></ul>
+                    <h3>晚間：美食與購物</h3>
+                    <ul><li>**Pizzeria Spontini** (米蘭排隊披薩) 或 **巴巴辣重慶老火鍋** (重口味選擇)。</li></ul>
+                    <div class="hotel-info">
+                        <h3>🏠 住宿</h3>
+                        <p>德拉葛雷住宅酒店</p>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>04/11 (六) | ✈️ 米蘭 &rarr; 台灣</summary>
+                <div class="schedule-detail">
+                    <h3>上午</h3>
+                    <ul><li>米蘭 Malpensa 機場 (MXP) &rarr; 辦理登機/退稅。</li><li>**班機：** BR96 11:15am 起飛。</li></ul>
+                </div>
+            </details>
+        </div>
+        
+        <div id="map-food" class="content-section" style="display:none;">
+             <div class="card">
+                <h2>🗺️ 導航與美食連結</h2>
+                
+                <h3 style="color: var(--primary-color);">🍽️ 推薦美食 (點擊導航)</h3>
+                <ul class="list-group">
+                    <li>**策馬特：Whymper-Stube** (起司火鍋) <a href="https://maps.app.goo.gl/2mixxNWf23MqD8LTj8" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**策馬特：Pizzeria Molino** (比薩/義式) <a href="https://maps.app.goo.gl/CYmxAzANrQ4rQTVBm8" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**策馬特：After Seven** (米其林精緻) <a href="https://maps.app.goo.gl/SedduiaU7eE3rPz9" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**格林德瓦：Restaurant Belvedere** (景觀晚餐) <a href="https://maps.app.goo.gl/P8J8rWQFmatmaH8TC8" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**格林德瓦：Pizzeria Grund** (比薩) <a href="https://maps.app.goo.gl/UumUUcMS6E2F2U4u6" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**格林德瓦：Barys Restaurant** (餐酒館) <a href="https://maps.app.goo.gl/qkzXn3WHM8q84s7s7" target="_blank" class="link-style">🔗 導航</a> </li>
+                    <li>**米蘭：Pizzeria Spontini** (排隊披薩) <a href="https://maps.app.goo.gl/fTD2TfKdKNHiATiFRL99" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**米蘭：Luini Panzerotti** (炸餡餅) <a href="https://maps.app.goo.gl/ibG63Ljs39ZCF3FYC7" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**米蘭：巴巴辣重慶老火鍋** <a href="https://maps.app.goo.gl/AMsnTymrisEhiuC96" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**米蘭：Dream Korean Restaurant** <a href="https://maps.app.goo.gl/hzjBDFEP9gpvUxzz7" target="_blank" class="link-style">🔗 導航</a></li>
+                </ul>
+
+                <h3 style="color: var(--primary-color);">🏨 飯店與景點連結</h3>
+                 <ul class="list-group">
+                    <li>**停車/轉乘：** Täsch P+R 停車場 <a href="https://maps.app.goo.gl/UPj9kig77cK3EEd88" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**策馬特飯店：** Carina Hotel <a href="https://maps.app.goo.gl/SedduiaU7eE3rPz9" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**格林德瓦飯店：** Eiger Lodge Chic <a href="https://maps.app.goo.gl/YgEX3X7S6F38cxtA4" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**米蘭飯店：** 德拉葛雷酒店 <a href="https://maps.app.goo.gl/M4rJmkzLhEN3Sait9" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**策馬特景點：** Gornergrat 登山火車站 <a href="https://maps.app.goo.gl/R6jC51YPrUiD4TC4R8" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**格林德瓦景點：** First Cliff Walk (懸崖步道) <a href="https://maps.app.goo.gl/uLrkR79iZVieLwfMHA" target="_blank" class="link-style">🔗 導航</a></li>
+                    <li>**米蘭景點：** 科莫湖 (Lake Como) <a href="https://maps.app.goo.gl/BTyXo8T17uMywrbpt6" target="_blank" class="link-style">🔗 導航</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="tools-booking" class="content-section" style="display:none;">
+            <div class="card">
+                <h2>🛠️ 實用工具箱</h2>
+                
+                <h3 style="color: var(--primary-color);">🗣️ 即時翻譯</h3>
+                <p>開啟手機翻譯 App 進行語音對話，或使用以下網頁版連結：</p>
+                <a href="https://translate.google.com/?sl=zh-TW&tl=en&op=translate" target="_blank" class="link-style">🔗 點擊開啟 Google 翻譯網頁版</a>
+                
+                <h3 style="color: var(--primary-color); margin-top: 25px;">📋 預訂與清單</h3>
+                <ul class="list-group">
+                    <li>住宿狀態： 米蘭住宿 **不可取消**，其餘可取消。</li>
+                    <li>租車/票券： 租車預訂，eSIM。</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    <button onclick="topFunction()" id="backToTop" title="回頂部">↑</button>
+
+    <div class="tab-bar">
+        <div class="tab-item">
+            <a href="#itinerary" class="active" onclick="showTab('itinerary', this)">
+                <i>🗓️</i>
+                <span>行程</span>
+            </a>
+        </div>
+        <div class="tab-item">
+            <a href="#map-food" onclick="showTab('map-food', this)">
+                <i>🗺️</i>
+                <span>導航連結</span>
+            </a>
+        </div>
+        <div class="tab-item">
+            <a href="#tools-booking" onclick="showTab('tools-booking', this)">
+                <i>🛠️</i>
+                <span>工具/預訂</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabId, element) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+            document.querySelectorAll('.tab-item a').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+            event.preventDefault();
+        }
+        
+        // 返回頂部功能 JS
+        let mybutton = document.getElementById("backToTop");
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        // 頁面載入時確保只顯示第一個 Tab
+        document.addEventListener('DOMContentLoaded', () => {
+             document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById('itinerary').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
